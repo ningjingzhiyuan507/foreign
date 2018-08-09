@@ -74,7 +74,7 @@ writeForeignSAS <- function(df, datafile, codefile, dataname = "rdata",
     ## https://kb.iu.edu/d/aydn
     write.table(dfn, file = datafile, row.names = FALSE, col.names = FALSE,
                 sep = ",", quote = TRUE, na = "", qmethod = "double")
-    lrecl <- max(sapply(readLines(datafile),nchar)) + 4L
+    lrecl <- 2000 #max(sapply(readLines(datafile),nchar)) + 4L
 
     cat("* Written by R;\n", file = codefile)
     cat("* ", deparse(sys.call(-2L))[1L], ";\n\n",
@@ -105,7 +105,7 @@ writeForeignSAS <- function(df, datafile, codefile, dataname = "rdata",
     if (any(strings)) {
         cat("LENGTH", file = codefile, append = TRUE)
         lengths <- sapply(df[,strings, drop = FALSE],
-                          FUN = function(x) max(nchar(x)))
+                          FUN = function(x) max(nchar(x))*3)
         names(lengths) <- varnames[strings]
         for(v in varnames[strings])
             cat("\n", v, "$", lengths[v], file = codefile, append = TRUE)
